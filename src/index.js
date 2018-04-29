@@ -1,3 +1,4 @@
+import 'source-map-support/register'
 import Web3 from 'web3'
 import Dagger from 'eth-dagger'
 import Twitter from 'twitter'
@@ -68,13 +69,21 @@ const getChipClaimedText = (chipId, sender, isRopsten) =>
 const getNumChipsText = (numChipsMinted, numChipsClaimed) => {
   const numChipsUnclaimed = numChipsMinted - numChipsClaimed
   // first 10 chips are gone
-  if (numChipsClaimed === 10) { return `The first 10 chips are gone! ${emojis.dizzy}` }
+  if (numChipsClaimed === 10) {
+    return `The first 10 chips are gone! ${emojis.dizzy}`
+  }
   // 2/3 chips remaining (exactly)
-  if (numChipsUnclaimed === Math.ceil(2 / 3 * numChipsMinted)) { return `A third of the way there! ${emojis.third}` }
+  if (numChipsUnclaimed === Math.ceil(2 / 3 * numChipsMinted)) {
+    return `A third of the way there! ${emojis.third}`
+  }
   // 1/2 chips remaining (exactly)
-  if (numChipsUnclaimed === Math.ceil(1 / 2 * numChipsMinted)) { return `Half way there! ${numChipsMinted} left ${emojis.horns}` }
+  if (numChipsUnclaimed === Math.ceil(1 / 2 * numChipsMinted)) {
+    return `Half way there! ${numChipsMinted} left ${emojis.horns}`
+  }
   // < 1/4 chips remaining
-  if (numChipsUnclaimed <= Math.floor(1 / 4 * numChipsMinted)) { return `Only ${numChipsUnclaimed} left! ${emojis.anxious}` }
+  if (numChipsUnclaimed <= Math.floor(1 / 4 * numChipsMinted)) {
+    return `Only ${numChipsUnclaimed} left! ${emojis.anxious}`
+  }
   // last chip has been claimed
   if (numChipsUnclaimed === 0) {
     return `Aaaaand they're gone, every chip has been claimed! ${
