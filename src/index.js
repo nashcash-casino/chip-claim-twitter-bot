@@ -61,9 +61,7 @@ const padId = id => {
 
 // utility for generating a portion of the tweet body regarding claiming
 const getChipClaimedText = (chipId, sender, isRopsten) =>
-  `${isRopsten ? 'Ropsten ' : ''}Chip #${padId(
-    chipId
-  )} has been claimed by ${sender}.`
+  `${isRopsten ? 'Ropsten ' : ''}Chip #${padId(chipId)} has been claimed.`
 
 // utility for generating a portion of the tweet body regarding chip supply
 const getNumChipsText = (numChipsMinted, numChipsClaimed) => {
@@ -78,7 +76,7 @@ const getNumChipsText = (numChipsMinted, numChipsClaimed) => {
   }
   // 1/2 chips remaining (exactly)
   if (numChipsUnclaimed === Math.ceil(1 / 2 * numChipsMinted)) {
-    return `Half way there! ${numChipsMinted} left ${emojis.horns}`
+    return `Half way there! ${numChipsMinted} left! ${emojis.horns}`
   }
   // < 1/4 chips remaining
   if (numChipsUnclaimed <= Math.floor(1 / 4 * numChipsMinted)) {
@@ -91,7 +89,7 @@ const getNumChipsText = (numChipsMinted, numChipsClaimed) => {
     }`
   }
   // default
-  return `There are ${numChipsUnclaimed} left to claim ${sample(
+  return `There are ${numChipsUnclaimed} left to claim! ${sample(
     randomEmojiList
   )}`
 }
