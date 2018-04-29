@@ -1,0 +1,28 @@
+{
+  "name": "nashcash-chip-claim-twitter-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "backpack",
+    "build": "backpack build",
+    "start": "node ./build/main.js",
+    "deploy": "git push heroku master",
+    "heroku-postbuild": "npm run build",
+    "precommit": "lint-staged"
+  },
+  "dependencies": {
+    "dotenv": "^5.0.1",
+    "eth-dagger": "^0.0.1-beta.3",
+    "lodash.sample": "^4.2.1",
+    "twitter": "^1.7.1",
+    "web3": "^1.0.0-beta.34",
+    "winston": "^3.0.0-rc5"
+  },
+  "devDependencies": {
+    "backpack-core": "^0.7.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^7.0.5",
+    "prettier-standard": "^8.0.1"
+  }
+}
