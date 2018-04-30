@@ -1,4 +1,4 @@
-import 'source-map-support/register'
+// import 'source-map-support/register'
 import Web3 from 'web3'
 import Dagger from 'eth-dagger'
 import Twitter from 'twitter'
@@ -20,13 +20,12 @@ const logger = winston.createLogger({
   ]
 })
 
-if (process.env.NODE_ENV !== 'production') {
-  logger.add(
-    new winston.transports.Console({
-      format: winston.format.simple()
-    })
-  )
-}
+// add simple logger
+logger.add(
+  new winston.transports.Console({
+    format: winston.format.simple()
+  })
+)
 
 // hashtags for tweet body
 const hashtagsText = '#nashcash #ethereal'
