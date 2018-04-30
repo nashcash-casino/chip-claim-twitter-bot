@@ -10,32 +10,13 @@ import ChipTreasury from './contracts/ChipTreasury'
 // load env vars
 dotenv.config()
 
-//
-// Requiring `winston-papertrail` will expose
-// `winston.transports.Papertrail`
-//
-require('winston-papertrail').Papertrail
-
-// paper trail transport
-const winstonPapertrail = new winston.transports.Papertrail({
-  host: 'logs.papertrailapp.com',
-  port: 12345
-})
-
-// Handle, report, or silently ignore connection errors and failures
-winstonPapertrail.on('error', err => {
-  throw new Error(err)
-  // process.exit(1)
-})
-
 // create logger
 const logger = winston.createLogger({
   level: 'info',
   format: winston.format.json(),
   transports: [
-    winstonPapertrail
-    // new winston.transports.File({ filename: 'error.log', level: 'error' }),
-    // new winston.transports.File({ filename: 'combined.log' })
+    new winston.transports.File({ filename: 'error.log', level: 'error' }),
+    new winston.transports.File({ filename: 'combined.log' })
   ]
 })
 
