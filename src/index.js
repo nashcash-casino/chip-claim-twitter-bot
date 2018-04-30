@@ -24,7 +24,8 @@ const winstonPapertrail = new winston.transports.Papertrail({
 
 // Handle, report, or silently ignore connection errors and failures
 winstonPapertrail.on('error', err => {
-  process.exit(1)
+  throw new Error(err)
+  // process.exit(1)
 })
 
 // create logger
