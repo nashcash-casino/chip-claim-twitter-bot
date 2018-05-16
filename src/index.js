@@ -59,8 +59,8 @@ const padId = id => {
 }
 
 // utility for generating a portion of the tweet body regarding claiming
-const getChipClaimedText = (chipId, sender, isRopsten) =>
-  `${isRopsten ? 'Ropsten ' : ''}Chip #${padId(chipId)} has been claimed.`
+const getChipClaimedText = (chipId, sender) =>
+  `Chip #${padId(chipId)} has been claimed.`
 
 // utility for generating a portion of the tweet body regarding chip supply
 const getNumChipsText = (numChipsMinted, numChipsClaimed) => {
@@ -95,9 +95,7 @@ const getNumChipsText = (numChipsMinted, numChipsClaimed) => {
 
 // instantiate web3 clients
 const web3 = new Web3(process.env.WS_PROVIDER)
-const web3Ropsten = new Web3(process.env.WS_PROVIDER_ROPSTEN)
 const dagger = new Dagger('wss://mainnet.dagger.matic.network')
-const daggerRopsten = new Dagger('wss://ropsten.dagger.matic.network')
 
 // instantiate twitter client
 const twitterClient = new Twitter({
@@ -113,33 +111,17 @@ const web3Contract = new web3.eth.Contract(
   ChipTreasury.abi,
   process.env.CONTRACT_ADDRESS
 )
-const web3ContractRopsten = new web3Ropsten.eth.Contract(
-  abi,
-  process.env.CONTRACT_ADDRESS_ROPSTEN
-)
 const daggerContract = dagger.contract(web3Contract)
-const daggerContractRopsten = daggerRopsten.contract(web3ContractRopsten)
 
 // listen for incoming blocks
 dagger.on('latest:block.number', blockNumber => {
   logger.info(`Mainnet: Current Block # ${blockNumber}`)
 })
 
-daggerRopsten.on('latest:block.number', async blockNumber => {
-  logger.info(`Ropsten: Current Block # ${blockNumber}`)
-})
-
 const chipClaimSuccessFilter = daggerContract.events.ChipClaimSuccess({
   from: 'latest',
   room: 'latest'
 })
-
-const chipClaimSuccessFilterRopsten = daggerContractRopsten.events.ChipClaimSuccess(
-  {
-    from: 'latest',
-    room: 'latest'
-  }
-)
 
 chipClaimSuccessFilter.watch(async event => {
   try {
@@ -159,33 +141,6 @@ chipClaimSuccessFilter.watch(async event => {
 
     const tweet = await twitterClient.post('statuses/update', { status })
     logger.info(`Mainnet: New Tweet: ${tweet.text}`)
-  } catch (err) {
-    logger.error(err)
-  }
-})
-
-chipClaimSuccessFilterRopsten.watch(async event => {
-  try {
-    const { transactionHash, returnValues: { chipId, sender } } = event
-    const etherscanUrl = `https://ropsten.etherscan.io/tx/${transactionHash}`
-    const numChipsMinted = await web3ContractRopsten.methods
-      .numChipsMinted()
-      .call()
-    const numChipsClaimed = await web3ContractRopsten.methods
-      .numChipsClaimed()
-      .call()
-
-    const chipClaimedText = getChipClaimedText(chipId, sender, true)
-    const numChipsText = getNumChipsText(numChipsMinted, numChipsClaimed)
-    const status = [
-      chipClaimedText,
-      numChipsText,
-      hashtagsText,
-      etherscanUrl
-    ].join(' ')
-
-    const tweet = await twitterClient.post('statuses/update', { status })
-    logger.info(`Ropsten: New Tweet: ${tweet.text}`)
   } catch (err) {
     logger.error(err)
   }
