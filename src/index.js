@@ -106,7 +106,6 @@ const twitterClient = new Twitter({
 })
 
 // get contract instances
-const { abi } = ChipTreasury
 const web3Contract = new web3.eth.Contract(
   ChipTreasury.abi,
   process.env.CONTRACT_ADDRESS
@@ -120,7 +119,7 @@ dagger.on('latest:block.number', blockNumber => {
 
 const chipClaimSuccessFilter = daggerContract.events.ChipClaimSuccess({
   from: 'latest',
-  room: 'latest'
+  room: 'confirmed'
 })
 
 chipClaimSuccessFilter.watch(async event => {
